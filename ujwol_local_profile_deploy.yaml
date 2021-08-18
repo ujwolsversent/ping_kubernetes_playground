@@ -93,7 +93,7 @@ spec:
   capacity:
     storage: 10Gi
   local:
-    path: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/baseline/pingdirectory
+    path: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingdirectory
   nodeAffinity:
     required:
       nodeSelectorTerms:
@@ -115,7 +115,7 @@ spec:
   capacity:
     storage: 10Gi
   local:
-    path: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/baseline/pingfederate
+    path: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingfederate
   nodeAffinity:
     required:
       nodeSelectorTerms:

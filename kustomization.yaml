@@ -81,7 +81,7 @@ patchesJson6902:
     patch: |-
       - op: replace
         path: /spec/local/path
-        value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/baseline/pingdirectory
+        value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingdirectory
   # Add the paths to the PingFederate profile local folder
   - target:
       group:
@@ -91,7 +91,7 @@ patchesJson6902:
     patch: |-
       - op: replace
         path: /spec/local/path
-        value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/baseline/pingfederate
+        value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingfederate
   # Insert claims and volumes for containers for the PingFederate profile
   - target:
       group: apps

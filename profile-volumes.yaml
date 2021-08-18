@@ -74,3 +74,42 @@ spec:
   resources:
     requests:
         storage: 10Gi
+---
+# The input volumes for the PingAccess server profiles
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pa-profile-volume
+spec:
+  capacity:
+    storage: 10Gi
+  volumeMode: Filesystem
+  accessModes:
+  - ReadOnlyMany
+  storageClassName: pa-local-in-storage
+  local:
+    path: <path to be placed via patch in kustomization.yaml, points to server profiles>
+  # The following links this volumen to a node in the cluster
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - docker-desktop
+---
+# The claim is used by the pod to claim the persistent volume defined
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pa-profile-claim
+spec:
+  # It links to the volume by the storageClassName
+  storageClassName: pa-local-in-storage
+  accessModes:
+    - ReadOnlyMany
+  resources:
+    requests:
+        storage: 10Gi
+

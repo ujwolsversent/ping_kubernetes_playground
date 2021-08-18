@@ -6,6 +6,7 @@ resources:
 - github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingfederate
 - github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdataconsole
 - github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdirectory
+- github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingaccess
 
 patchesJson6902:
   - target:
@@ -49,6 +50,15 @@ patchesJson6902:
       - op: add
         path: /spec/type
         value: NodePort
+  - target:
+      group: 
+      version: v1
+      kind: Service
+      name: pingaccess
+    patch: |-
+      - op: add
+        path: /spec/type
+        value: NodePort
   # Remove entries for profile URL and paths for PingDirectory
   - target:
       group:
@@ -72,6 +82,18 @@ patchesJson6902:
       - op: remove
         path: /data/SERVER_PROFILE_URL
           # Remove entries for profile URL and paths for PingFederate
+  # Remove entries for profile URL and paths for PingAccess
+  - target:
+      group:
+      version: v1
+      kind: ConfigMap
+      name: pingaccess-environment-variables
+    patch: |-
+      - op: remove
+        path: /data/SERVER_PROFILE_PATH
+      - op: remove
+        path: /data/SERVER_PROFILE_URL
+  # Remove entries for profile URL and paths for pingaccess
   # Add the paths to the PingDirectory profile local folder
   - target:
       group:
@@ -92,6 +114,16 @@ patchesJson6902:
       - op: replace
         path: /spec/local/path
         value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingfederate
+  # Add the paths to the PingAccess profile local folder
+  - target:
+      group:
+      version: v1
+      kind: PersistentVolume
+      name: pa-profile-volume
+    patch: |-
+      - op: replace
+        path: /spec/local/path
+        value: /Users/ujwolshrestha/projects/devops/ping_kubernetes_playground/pingidentity-server-profiles/getting-started/pingaccess
   # Insert claims and volumes for containers for the PingFederate profile
   - target:
       group: apps
@@ -128,4 +160,22 @@ patchesJson6902:
         value: 
             - mountPath: /opt/in
               name: pd-profile-storage
+  # Insert claims and volumes for containers for the PingAccess profile
+  - target:
+      group: apps
+      version: v1
+      kind: StatefulSet
+      name: pingaccess
+    patch: |-
+      - op: add
+        path: /spec/template/spec/volumes
+        value: 
+            - name: pa-profile-storage
+              persistentVolumeClaim:
+                claimName: pa-profile-claim
+      - op: add
+        path: /spec/template/spec/containers/0/volumeMounts
+        value: 
+            - mountPath: /opt/in
+              name: pa-profile-storage
 
